@@ -9,6 +9,7 @@ if (!flavor.textContent) {
 let player = {
   score: 0n,
   perSec: 0n,
+  fractionalScore: 0n,
 };
 
 function updateGame() {
@@ -16,6 +17,11 @@ function updateGame() {
 }
 
 setInterval(function () {
-  player.score += player.perSec / 100;
+  player.fractionalScore += player.perSec;
+
+  player.score = player.fractionalScore / 100n;
+
+  updateGame();
 }, 10);
+
 updateGame();
