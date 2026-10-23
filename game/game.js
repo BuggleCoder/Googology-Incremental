@@ -1,27 +1,28 @@
 class BEAFNumber {
   constructor(array = [0]) {
+    if (
+      !Array.isArray(array) ||
+      array.length === 0 ||
+      array.some((n) => !Number.isSafeInteger(n) || n < 0)
+    ) {
+      throw new Error("Invalid BEAF array");
+    }
+
     this.array = [...array];
-    this.normalize();
   }
 
-  normalize() {
-    while (this.array.length > 1 && this.array[this.array.length - 1] === 1) {
-      this.array.pop();
+  compare(other) {
+    if (this.array.length !== other.array.length) {
+      return Math.sign(this.array.length - other.array.length);
     }
 
-    if (this.array.some((n) => !Number.isSafeInteger(n) || n < 0)) {
-      throw new Error("BEAF entries must be non-negative safe integers.");
-    }
-  }
-
-  addOne() {
-    if (this.array.length === 1) {
-      this.array[0]++;
-    } else {
-      this.array = [this.array[0] + 1];
+    for (let i = 0; i < this.array.length; i++) {
+      if (this.array[i] !== other.array[i]) {
+        return Math.sign(this.array[i] - other.array[i]);
+      }
     }
 
-    return this;
+    return 0;
   }
 
   toString() {
@@ -40,9 +41,9 @@ if (!flavor.textContent) {
   flavor.textContent = "Hello fellow Googologist";
 }
 
-let player = {
+const player = {
   score: new BEAFNumber([0]),
-  perSec: new BEAFNumber([10, 100]),
+  perSec: new BEAFNumber([1]),
 };
 
 function updateGame() {
@@ -51,8 +52,7 @@ function updateGame() {
     `Your number goes up by ${player.perSec.toString()} every second`;
 }
 
-setInterval(function () {
-  player.score.addOne();
+setInterval(() => {
   updateGame();
 }, 1000);
 
