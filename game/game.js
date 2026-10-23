@@ -11,9 +11,10 @@ let player = {
   perSec: 0n,
 };
 
-function game() {
-  score.textContent = `Your number is ${player.score} \n Your number goes up by ${player.perSec} Every Second`;
-  game();
+function updateGame() {
+  score.textContent = `Your number is ${player.score}\nYour number goes up by ${player.perSec} Every Second`;
 }
 
-player.score += 100 * player.perSec;
+setInterval(updateGame, 1000);
+
+updateGame();
